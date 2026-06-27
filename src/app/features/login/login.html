@@ -1,0 +1,41 @@
+<app-auth-layout
+  title="Zeiterfassung modern & einfach"
+  subtitle="Melde dich mit deinem Konto an"
+>
+  <form class="flex flex-col gap-5" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <app-input
+      class="w-full"
+      type="email"
+      label="E-Mail"
+      placeholder="hello@firma.de"
+      formControlName="email"
+      [error]="fieldError('email')"
+    />
+
+    <app-input
+      class="w-full"
+      type="password"
+      label="Passwort"
+      placeholder="********"
+      formControlName="password"
+      [error]="fieldError('password')"
+    />
+
+    @if (errorMessage()) {
+      <p class="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">
+        {{ errorMessage() }}
+      </p>
+    }
+
+    <app-button type="submit" size="full" [disabled]="isLoading()">
+      {{ isLoading() ? 'Wird angemeldet…' : 'Anmelden' }}
+    </app-button>
+
+    <p class="text-center text-sm text-text-light">
+      Noch kein Konto?
+      <a routerLink="/register" class="font-semibold text-secondary hover:underline">
+        Jetzt registrieren
+      </a>
+    </p>
+  </form>
+</app-auth-layout>

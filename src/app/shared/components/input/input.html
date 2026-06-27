@@ -1,0 +1,29 @@
+<label class="block space-y-2">
+  @if (label()) {
+    <span class="text-sm font-medium text-text">
+      {{ label() }}
+    </span>
+  }
+
+  <input
+    [type]="type()"
+    [placeholder]="placeholder()"
+    [disabled]="isInputDisabled()"
+    [value]="value()"
+    (input)="onInput($event)"
+    (blur)="onBlur()"
+    class="
+      w-full rounded-2xl border border-slate-200 bg-background px-4 py-3
+      text-text shadow-sm outline-none transition
+      placeholder:text-text-light
+      focus:border-secondary focus:ring-2 focus:ring-secondary/20
+      disabled:cursor-not-allowed disabled:bg-slate-100 disabled:opacity-60
+    "
+  />
+
+  @if (error()) {
+    <p class="text-sm text-red-600">
+      {{ error() }}
+    </p>
+  }
+</label>

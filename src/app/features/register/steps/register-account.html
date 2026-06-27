@@ -1,0 +1,54 @@
+<form class="flex flex-col gap-5" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="grid gap-5 sm:grid-cols-2">
+    <app-input
+      class="w-full"
+      label="Vorname"
+      placeholder="Max"
+      formControlName="firstName"
+      [error]="fieldError('firstName')"
+    />
+    <app-input
+      class="w-full"
+      label="Nachname"
+      placeholder="Mustermann"
+      formControlName="lastName"
+      [error]="fieldError('lastName')"
+    />
+  </div>
+
+  <app-input
+    class="w-full"
+    type="email"
+    label="E-Mail"
+    placeholder="hello@firma.de"
+    formControlName="email"
+    [error]="fieldError('email')"
+  />
+
+  <app-input
+    class="w-full"
+    type="password"
+    label="Passwort"
+    placeholder="********"
+    formControlName="password"
+    [error]="fieldError('password')"
+  />
+
+  <app-input
+    class="w-full"
+    type="password"
+    label="Passwort bestätigen"
+    placeholder="********"
+    formControlName="confirmPassword"
+    [error]="confirmPasswordError()"
+  />
+
+  <app-button type="submit" size="full">Weiter</app-button>
+
+  <p class="text-center text-sm text-text-light">
+    Bereits registriert?
+    <a routerLink="/login" class="font-semibold text-secondary hover:underline">
+      Anmelden
+    </a>
+  </p>
+</form>

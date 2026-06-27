@@ -1,0 +1,64 @@
+.hero-content {
+  transition:
+    transform 120ms linear,
+    opacity 120ms linear;
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+.fade-only {
+  opacity: 0;
+  animation: fadeIn 1s ease forwards;
+}
+
+.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.delay-400 {
+  animation-delay: 0.4s;
+}
+
+.delay-600 {
+  animation-delay: 0.6s;
+}
+
+.delay-800 {
+  animation-delay: 0.8s;
+}
+
+.delay-1000 {
+  animation-delay: 1s;
+}
+
+.scroll-dot {
+  animation: scrollDot 1.5s ease-in-out infinite;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scrollDot {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(12px);
+  }
+}

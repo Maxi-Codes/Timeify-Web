@@ -1,0 +1,50 @@
+<section
+  #heroSection
+  class="relative h-screen overflow-hidden bg-cover bg-center bg-no-repeat"
+  [style.background-image]="'url(' + backgroundUrl + ')'"
+>
+  <div class="absolute inset-0 bg-white/50 backdrop-blur-[2px]"></div>
+
+  <div
+    class="hero-content relative z-10 flex h-full flex-col items-center justify-center px-6"
+    [style.transform]="'translateY(' + translateY() + ')'"
+    [style.opacity]="opacity()"
+  >
+    <div class="fade-in delay-200 mb-8 flex items-center gap-4">
+      <div class="flex h-16 w-16 items-center justify-center rounded-2xl shadow-lg">
+        <img [src]="logoUrl" alt="Timeify Logo" />
+      </div>
+
+      <h1 class="text-5xl font-bold tracking-tight text-[#0B1F3A] md:text-6xl">
+        Time<span class="text-[#F59E0B]">ify</span>
+      </h1>
+    </div>
+
+    <h2
+      class="fade-in delay-400 mb-6 max-w-5xl text-center text-5xl font-bold leading-tight text-[#111827] md:text-7xl"
+    >
+      Zeiterfassung <br />
+      modern & einfach
+    </h2>
+
+    <p
+      class="fade-in delay-600 mb-12 max-w-2xl text-center text-lg text-[#374151] md:text-2xl"
+    >
+      Arbeitszeiten buchen, Urlaub beantragen und Krankmeldungen —
+      alles digital an einem Ort.
+    </p>
+
+    <div class="flex gap-4">
+      <app-button size="lg" variant="primary" (click)="goToLogin()"> Anmelden</app-button>
+      <app-button size="lg" (click)="goToRegister()">Registrieren</app-button>
+    </div>
+
+    <div class="fade-only delay-1000 absolute bottom-12 left-1/2 -translate-x-1/2">
+      <div
+        class="flex h-10 w-6 justify-center rounded-full border-2 border-[#0B1F3A]/50 p-1"
+      >
+        <div class="scroll-dot h-1.5 w-1.5 rounded-full bg-[#0B1F3A]/60"></div>
+      </div>
+    </div>
+  </div>
+</section>

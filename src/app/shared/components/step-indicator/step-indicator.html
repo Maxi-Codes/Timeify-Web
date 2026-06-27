@@ -1,0 +1,30 @@
+<div class="mb-8 flex items-center justify-center gap-2">
+  @for (step of steps(); track step.path; let i = $index) {
+    <div class="flex items-center gap-2">
+      <div
+        class="flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold transition-colors"
+        [class]="
+          i + 1 <= currentStep()
+            ? 'bg-secondary text-white'
+            : 'bg-slate-200 text-text-light'
+        "
+      >
+        {{ i + 1 }}
+      </div>
+
+      <span
+        class="hidden text-sm font-medium sm:inline"
+        [class]="i + 1 <= currentStep() ? 'text-text' : 'text-text-light'"
+      >
+        {{ step.label }}
+      </span>
+
+      @if (i < steps().length - 1) {
+        <div
+          class="mx-1 h-0.5 w-6 rounded sm:w-10"
+          [class]="i + 1 < currentStep() ? 'bg-secondary' : 'bg-slate-200'"
+        ></div>
+      }
+    </div>
+  }
+</div>

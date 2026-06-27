@@ -1,0 +1,43 @@
+<div class="rounded-2xl border-2 border-secondary bg-white p-6 shadow-sm">
+  <div class="mb-6 text-center">
+    <p class="text-sm font-medium uppercase tracking-wide text-text-light">
+      Empfohlen
+    </p>
+    <h3 class="mt-1 text-2xl font-bold text-primary">{{ plan.name }}</h3>
+    <p class="mt-2">
+      <span class="text-4xl font-bold text-secondary">{{ plan.price }} €</span>
+      <span class="text-text-light"> / Monat</span>
+    </p>
+  </div>
+
+  <ul class="mb-8 space-y-3">
+    @for (feature of plan.features; track feature) {
+      <li class="flex items-center gap-2 text-sm text-text">
+        <span class="flex h-5 w-5 items-center justify-center rounded-full bg-secondary/15 text-secondary">
+          ✓
+        </span>
+        {{ feature }}
+      </li>
+    }
+  </ul>
+
+  @if (errorMessage()) {
+    <p class="mb-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">
+      {{ errorMessage() }}
+    </p>
+  }
+
+  <div class="flex flex-col gap-3 sm:flex-row">
+    <app-button type="button" variant="outline" size="lg" (click)="goBack()">
+      Zurück
+    </app-button>
+    <app-button
+      type="button"
+      size="lg"
+      [disabled]="isLoading()"
+      (click)="onOrder()"
+    >
+      {{ isLoading() ? 'Wird verarbeitet…' : 'Bestellen' }}
+    </app-button>
+  </div>
+</div>

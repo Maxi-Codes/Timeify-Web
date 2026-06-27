@@ -1,0 +1,7 @@
+<app-auth-layout
+  title="Konto erstellen"
+  subtitle="Starte in wenigen Schritten mit Timeify"
+>
+  <app-step-indicator [steps]="steps" [currentStep]="currentStep" />
+  <router-outlet (activate)="onStepActivate($event)" />
+</app-auth-layout>

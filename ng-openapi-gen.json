@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/ng-openapi-gen/ng-openapi-gen-schema.json",
+  "input": "swagger.json",
+  "output": "src/app/api",
+  "servicePrefix": "",
+  "ignoreUnusedModels": false,
+  "minParamsForContainer": 2,
+  "sortParams": "desc",
+  "defaultTag": "Api",
+  "removeStaleFiles": true,
+  "modelIndex": true,
+  "serviceIndex": true,
+  "apiModule": false,
+  "enumModule": true,
+  "generateExamples": false,
+  "camelCase": true,
+  "module": false,
+  "providedInRoot": true,
+  "promises": false,
+  "ngVersion": "19.0.0"
+}
