@@ -2,14 +2,21 @@ import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, map, tap } from 'rxjs';
 import { Api } from '../../api/api';
-import {
-  apiAuthLoginPost,
-  apiAuthRegisterCompanyPost,
-} from '../../api/functions';
+import { apiAuthLoginPost, apiAuthRegisterCompanyPost } from '../../api/functions';
 import { LoginDto } from '../../api/models/login-dto';
 import { RegisterCompanyDto } from '../../api/models/register-company-dto';
+import { jwtDecode } from 'jwt-decode';
 
 const TOKEN_KEY = 'timeify_access_token';
+
+interface JwtPayload {
+  userId: string;
+  companyId: string;
+  exp: number;
+  iss: string;
+  aud: string;
+  'http://schemas.microsoft.com/ws/2008/06/identity/claims/role': string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -47,5 +54,26 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     return !!this.getToken();
+  }
+
+  getJwtPayload(): JwtPayload | null {
+    const token = this.getToken();
+    return token ? jwtDecode<JwtPayload>(token) : null;
+  }
+
+  getUserId(): string | null {
+    return this.getJwtPayload()?.userId ?? null;
+  }
+
+  getCompanyId(): string | null {
+    return this.getJwtPayload()?.companyId ?? null;
+  }
+
+  getRole(): string | null {
+    return (
+      this.getJwtPayload()?.[
+        'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
+      ] ?? null
+    );
   }
 }

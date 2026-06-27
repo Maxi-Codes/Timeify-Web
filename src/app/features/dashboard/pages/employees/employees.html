@@ -1,0 +1,131 @@
+<div class="p-8">
+  <header class="mb-6 flex flex-wrap items-center justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-primary">Mitarbeiter</h1>
+      <p class="mt-1 text-text-light">Mitarbeiter verwalten und einladen</p>
+    </div>
+    <app-button (click)="openCreateModal()">+ Neuer Mitarbeiter</app-button>
+  </header>
+
+  <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    @if (isLoading()) {
+      <p class="p-8 text-center text-text-light">Wird geladen…</p>
+    } @else if (users().length === 0) {
+      <p class="p-8 text-center text-text-light">
+        Noch keine Mitarbeiter vorhanden. Lege den ersten Mitarbeiter an.
+      </p>
+    } @else {
+      <table class="w-full text-left text-sm">
+        <thead class="border-b border-slate-200 bg-slate-50 text-text-light">
+          <tr>
+            <th class="px-6 py-3 font-medium">Name</th>
+            <th class="hidden px-6 py-3 font-medium sm:table-cell">E-Mail</th>
+            <th class="px-6 py-3 font-medium">Rolle</th>
+            <th class="px-6 py-3 font-medium text-right">Aktionen</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          @for (user of users(); track user.id) {
+            <tr class="hover:bg-slate-50">
+              <td class="px-6 py-4 font-medium text-text">
+                {{ user.firstName }} {{ user.lastName }}
+              </td>
+              <td class="hidden px-6 py-4 text-text-light sm:table-cell">
+                {{ user.email }}
+              </td>
+              <td class="px-6 py-4">
+                <span
+                  class="inline-flex rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary"
+                >
+                  {{ roleName(user.role) }}
+                </span>
+              </td>
+              <td class="px-6 py-4 text-right">
+                <button
+                  type="button"
+                  class="mr-3 cursor-pointer text-secondary hover:underline"
+                  (click)="openEditModal(user)"
+                >
+                  Bearbeiten
+                </button>
+                <button
+                  type="button"
+                  class="cursor-pointer text-red-600 hover:underline"
+                  (click)="deleteUser(user)"
+                >
+                  Löschen
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+</div>
+
+<app-modal
+  [open]="modalOpen()"
+  [title]="editingUser() ? 'Mitarbeiter bearbeiten' : 'Neuer Mitarbeiter'"
+  (closed)="closeModal()"
+>
+  <form class="flex flex-col gap-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="grid gap-4 sm:grid-cols-2">
+      <app-input
+        label="Vorname"
+        placeholder="Max"
+        formControlName="firstName"
+        [error]="fieldError('firstName')"
+      />
+      <app-input
+        label="Nachname"
+        placeholder="Mustermann"
+        formControlName="lastName"
+        [error]="fieldError('lastName')"
+      />
+    </div>
+
+    <app-input
+      type="email"
+      label="E-Mail"
+      placeholder="max@firma.de"
+      formControlName="email"
+      [error]="fieldError('email')"
+    />
+
+    <app-input
+      type="password"
+      [label]="editingUser() ? 'Neues Passwort (optional)' : 'Passwort'"
+      placeholder="********"
+      formControlName="password"
+      [error]="fieldError('password')"
+    />
+
+    <label class="block space-y-2">
+      <span class="text-sm font-medium text-text">Rolle</span>
+      <select
+        formControlName="role"
+        class="w-full rounded-2xl border border-slate-200 bg-background px-4 py-3 text-text shadow-sm outline-none transition focus:border-secondary focus:ring-2 focus:ring-secondary/20"
+      >
+        @for (option of roleOptions; track option.value) {
+          <option [ngValue]="option.value">{{ option.label }}</option>
+        }
+      </select>
+    </label>
+
+    @if (errorMessage()) {
+      <p class="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">
+        {{ errorMessage() }}
+      </p>
+    }
+
+    <div class="flex justify-end gap-3 pt-2">
+      <app-button type="button" variant="outline" (click)="closeModal()">
+        Abbrechen
+      </app-button>
+      <app-button type="submit" [disabled]="isSaving()">
+        {{ isSaving() ? 'Wird gespeichert…' : 'Speichern' }}
+      </app-button>
+    </div>
+  </form>
+</app-modal>

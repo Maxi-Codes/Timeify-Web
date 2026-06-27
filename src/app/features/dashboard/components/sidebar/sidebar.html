@@ -1,0 +1,60 @@
+<aside
+  class="flex h-screen w-64 shrink-0 flex-col bg-primary text-white shadow-xl"
+>
+  <!-- Logo -->
+  <div class="border-b border-white/10 px-6 py-6">
+    <a routerLink="/dashboard" class="flex items-center gap-3">
+      <img
+        [src]="logoUrl"
+        alt="Timeify Logo"
+        class="h-10 w-10 rounded-xl bg-white/10 object-contain p-1"
+      />
+      <div>
+        <p class="text-lg font-bold leading-tight">
+          Time<span class="text-secondary">ify</span>
+        </p>
+        <p class="text-xs text-white/50">Zeiterfassung</p>
+      </div>
+    </a>
+  </div>
+
+  <!-- Hauptnavigation -->
+  <nav class="flex-1 overflow-y-auto px-3 py-4">
+    <ul class="space-y-1">
+      @for (item of mainNavItems; track item.route) {
+        <li>
+          <a
+            [routerLink]="item.route"
+            routerLinkActive="bg-secondary text-white shadow-md"
+            [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
+            class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-white/70 transition-all duration-200 hover:bg-white/10 hover:text-white"
+          >
+            <span class="text-base leading-none" aria-hidden="true">{{ item.icon }}</span>
+            {{ item.label }}
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+
+  <!-- Einstellungen + Abmelden -->
+  <div class="border-t border-white/10 px-3 py-4">
+    <a
+      [routerLink]="settingsItem.route"
+      routerLinkActive="bg-secondary text-white shadow-md"
+      class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-white/70 transition-all duration-200 hover:bg-white/10 hover:text-white"
+    >
+      <span class="text-base leading-none" aria-hidden="true">{{ settingsItem.icon }}</span>
+      {{ settingsItem.label }}
+    </a>
+
+    <button
+      type="button"
+      (click)="logout()"
+      class="mt-2 flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-white/40 transition-all duration-200 hover:bg-white/10 hover:text-white/70"
+    >
+      <span class="text-base leading-none" aria-hidden="true">↩</span>
+      Abmelden
+    </button>
+  </div>
+</aside>
