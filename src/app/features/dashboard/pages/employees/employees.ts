@@ -7,6 +7,7 @@ import {
   UpdateUserDto,
   UsersService,
 } from '../../../../core/services/users.service';
+import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog';
 import { ButtonComponent } from '../../../../shared/components/button/button';
 import { InputComponent } from '../../../../shared/components/input/input';
 import { ModalComponent } from '../../../../shared/components/modal/modal';
@@ -14,7 +15,7 @@ import { ModalComponent } from '../../../../shared/components/modal/modal';
 @Component({
   selector: 'app-employees',
   standalone: true,
-  imports: [ReactiveFormsModule, ButtonComponent, InputComponent, ModalComponent],
+  imports: [ReactiveFormsModule, ButtonComponent, InputComponent, ModalComponent, ConfirmDialogComponent],
   templateUrl: './employees.html',
 })
 export class EmployeesPage implements OnInit {
@@ -28,6 +29,11 @@ export class EmployeesPage implements OnInit {
   readonly modalOpen = signal(false);
   readonly editingUser = signal<User | null>(null);
   readonly errorMessage = signal('');
+  readonly deleteConfirmOpen = signal(false);
+  readonly infoDialogOpen = signal(false);
+  readonly userToDelete = signal<User | null>(null);
+  readonly deleteError = signal('');
+  readonly isDeleting = signal(false);
   readonly roleLabels = ROLE_LABELS;
   readonly roleOptions = Object.entries(ROLE_LABELS).map(([value, label]) => ({
     value: Number(value),
@@ -161,18 +167,47 @@ export class EmployeesPage implements OnInit {
 
   deleteUser(user: User): void {
     if (!user.id) return;
+
     if (user.id === this.auth.getUserId()) {
-      alert('Du kannst dein eigenes Konto nicht löschen.');
-      return;
-    }
-    if (!confirm(`Mitarbeiter „${user.firstName} ${user.lastName}“ wirklich löschen?`)) {
+      this.infoDialogOpen.set(true);
       return;
     }
 
+    this.userToDelete.set(user);
+    this.deleteError.set('');
+    this.deleteConfirmOpen.set(true);
+  }
+
+  closeDeleteConfirm(): void {
+    this.deleteConfirmOpen.set(false);
+    this.userToDelete.set(null);
+    this.deleteError.set('');
+  }
+
+  confirmDelete(): void {
+    const user = this.userToDelete();
+    if (!user?.id) return;
+
+    this.isDeleting.set(true);
+    this.deleteError.set('');
+
     this.usersService.delete(user.id).subscribe({
-      next: () => this.loadUsers(),
-      error: () => alert('Mitarbeiter konnte nicht gelöscht werden.'),
+      next: () => {
+        this.isDeleting.set(false);
+        this.closeDeleteConfirm();
+        this.loadUsers();
+      },
+      error: () => {
+        this.isDeleting.set(false);
+        this.deleteError.set('Mitarbeiter konnte nicht gelöscht werden.');
+      },
     });
+  }
+
+  deleteConfirmMessage(): string {
+    const user = this.userToDelete();
+    if (!user) return '';
+    return `Möchtest du den Mitarbeiter „${user.firstName} ${user.lastName}" wirklich löschen?`;
   }
 
   roleName(role?: number): string {

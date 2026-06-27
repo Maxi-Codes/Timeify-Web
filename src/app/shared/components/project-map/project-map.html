@@ -1,0 +1,44 @@
+<div class="space-y-3">
+  @if (!readonly()) {
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <p class="text-sm text-text-light">
+        Klicke auf die Karte oder suche die Adresse, um den Standort zu setzen.
+      </p>
+      <app-button
+        type="button"
+        size="sm"
+        variant="outline"
+        [disabled]="isGeocoding() || !mapReady()"
+        (click)="geocodeAddress()"
+      >
+        {{ isGeocoding() ? 'Suche…' : 'Adresse suchen' }}
+      </app-button>
+    </div>
+  }
+
+  @if (mapError()) {
+    <p class="rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800">
+      {{ mapError() }}
+    </p>
+  }
+
+  <div class="relative overflow-hidden rounded-2xl border border-slate-200">
+    <div #mapContainer class="h-[280px] w-full"></div>
+
+    @if (!mapReady()) {
+      <div
+        class="absolute inset-0 flex items-center justify-center bg-slate-50 text-sm text-text-light"
+      >
+        Karte wird geladen…
+      </div>
+    }
+  </div>
+
+  @if (displayCoordinates(); as coords) {
+    <p class="text-xs text-text-light">
+      Koordinaten: {{ coords.lat.toFixed(6) }}, {{ coords.lng.toFixed(6) }}
+    </p>
+  } @else if (!readonly()) {
+    <p class="text-xs text-text-light">Noch kein Standort gesetzt.</p>
+  }
+</div>

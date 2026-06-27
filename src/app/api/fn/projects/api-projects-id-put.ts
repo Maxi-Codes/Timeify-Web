@@ -7,13 +7,18 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { UpdateProjectDto } from '../../models/update-project-dto';
 
-export interface ApiProjectsGet$Params {
+export interface ApiProjectsIdPut$Params {
+  id: string;
+      body?: UpdateProjectDto
 }
 
-export function apiProjectsGet(http: HttpClient, rootUrl: string, params?: ApiProjectsGet$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiProjectsGet.PATH, 'get');
+export function apiProjectsIdPut(http: HttpClient, rootUrl: string, params: ApiProjectsIdPut$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, apiProjectsIdPut.PATH, 'put');
   if (params) {
+    rb.path('id', params.id, {});
+    rb.body(params.body, 'application/*+json');
   }
 
   return http.request(
@@ -26,4 +31,4 @@ export function apiProjectsGet(http: HttpClient, rootUrl: string, params?: ApiPr
   );
 }
 
-apiProjectsGet.PATH = '/api/projects';
+apiProjectsIdPut.PATH = '/api/projects/{id}';

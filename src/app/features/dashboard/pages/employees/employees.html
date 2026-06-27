@@ -129,3 +129,27 @@
     </div>
   </form>
 </app-modal>
+
+<app-confirm-dialog
+  [open]="deleteConfirmOpen()"
+  title="Mitarbeiter löschen"
+  [message]="deleteConfirmMessage()"
+  [error]="deleteError()"
+  confirmLabel="Löschen"
+  cancelLabel="Abbrechen"
+  variant="danger"
+  [isLoading]="isDeleting()"
+  (confirmed)="confirmDelete()"
+  (cancelled)="closeDeleteConfirm()"
+/>
+
+<app-confirm-dialog
+  [open]="infoDialogOpen()"
+  title="Nicht möglich"
+  message="Du kannst dein eigenes Konto nicht löschen."
+  confirmLabel="Verstanden"
+  [showCancel]="false"
+  variant="primary"
+  (confirmed)="infoDialogOpen.set(false)"
+  (cancelled)="infoDialogOpen.set(false)"
+/>

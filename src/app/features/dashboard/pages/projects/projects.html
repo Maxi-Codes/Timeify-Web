@@ -50,6 +50,13 @@
               <td class="px-6 py-4 text-right">
                 <button
                   type="button"
+                  class="mr-3 cursor-pointer text-primary hover:underline"
+                  (click)="openViewModal(project)"
+                >
+                  Ansehen
+                </button>
+                <button
+                  type="button"
                   class="mr-3 cursor-pointer text-secondary hover:underline"
                   (click)="openEditModal(project)"
                 >
@@ -71,10 +78,12 @@
   </div>
 </div>
 
+<!-- Erstellen / Bearbeiten -->
 <app-modal
-  [open]="modalOpen()"
+  [open]="formModalOpen()"
   [title]="editingProject() ? 'Projekt bearbeiten' : 'Neues Projekt'"
-  (closed)="closeModal()"
+  size="lg"
+  (closed)="closeFormModal()"
 >
   <form class="flex flex-col gap-4" [formGroup]="form" (ngSubmit)="onSubmit()">
     <app-input
@@ -102,10 +111,21 @@
       <app-input label="Land" placeholder="Deutschland" formControlName="country" />
     </div>
 
-    <label class="flex items-center gap-2 text-sm text-text">
-      <input type="checkbox" formControlName="isActive" class="rounded border-slate-300" />
-      Projekt ist aktiv
-    </label>
+    <app-project-map
+      [latitude]="mapLatitude()"
+      [longitude]="mapLongitude()"
+      [address]="formAddress()"
+      (latitudeChange)="setLatitude($event)"
+      (longitudeChange)="setLongitude($event)"
+      (addressChange)="setAddressFromMap($event)"
+    />
+
+    @if (editingProject()) {
+      <label class="flex items-center gap-2 text-sm text-text">
+        <input type="checkbox" formControlName="isActive" class="rounded border-slate-300" />
+        Projekt ist aktiv
+      </label>
+    }
 
     @if (errorMessage()) {
       <p class="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">
@@ -114,7 +134,7 @@
     }
 
     <div class="flex justify-end gap-3 pt-2">
-      <app-button type="button" variant="outline" (click)="closeModal()">
+      <app-button type="button" variant="outline" (click)="closeFormModal()">
         Abbrechen
       </app-button>
       <app-button type="submit" [disabled]="isSaving()">
@@ -123,3 +143,65 @@
     </div>
   </form>
 </app-modal>
+
+<!-- Ansehen -->
+<app-modal
+  [open]="viewModalOpen()"
+  [title]="viewingProject()?.name ?? 'Projekt'"
+  size="lg"
+  (closed)="closeViewModal()"
+>
+  @if (viewingProject(); as project) {
+    <div class="flex flex-col gap-5">
+      <div>
+        <p class="text-sm font-medium text-text-light">Beschreibung</p>
+        <p class="mt-1 text-text">{{ project.description || '—' }}</p>
+      </div>
+
+      <div>
+        <p class="text-sm font-medium text-text-light">Adresse</p>
+        <p class="mt-1 text-text">{{ formatAddress(project) }}</p>
+      </div>
+
+      <div>
+        <p class="mb-2 text-sm font-medium text-text-light">Standort</p>
+        <app-project-map
+          [readonly]="true"
+          [latitude]="project.address?.latitude ?? null"
+          [longitude]="project.address?.longitude ?? null"
+          [address]="project.address ?? null"
+        />
+      </div>
+
+      <div class="flex items-center justify-between">
+        <span
+          class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium"
+          [class]="
+            project.isActive !== false
+              ? 'bg-green-100 text-green-700'
+              : 'bg-slate-100 text-slate-600'
+          "
+        >
+          {{ project.isActive !== false ? 'Aktiv' : 'Inaktiv' }}
+        </span>
+
+        <app-button type="button" variant="outline" (click)="closeViewModal()">
+          Schließen
+        </app-button>
+      </div>
+    </div>
+  }
+</app-modal>
+
+<app-confirm-dialog
+  [open]="deleteConfirmOpen()"
+  title="Projekt löschen"
+  [message]="deleteConfirmMessage()"
+  [error]="deleteError()"
+  confirmLabel="Löschen"
+  cancelLabel="Abbrechen"
+  variant="danger"
+  [isLoading]="isDeleting()"
+  (confirmed)="confirmDelete()"
+  (cancelled)="closeDeleteConfirm()"
+/>

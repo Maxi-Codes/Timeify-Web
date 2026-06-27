@@ -1,13 +1,17 @@
 import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, map, tap } from 'rxjs';
-import { Api } from '../../api/api';
-import { apiAuthLoginPost, apiAuthRegisterCompanyPost } from '../../api/functions';
+import { environment } from '../../../environments/environment';
 import { LoginDto } from '../../api/models/login-dto';
 import { RegisterCompanyDto } from '../../api/models/register-company-dto';
 import { jwtDecode } from 'jwt-decode';
 
 const TOKEN_KEY = 'timeify_access_token';
+
+interface AuthResponseDto {
+  token?: string | null;
+}
 
 interface JwtPayload {
   userId: string;
@@ -20,23 +24,28 @@ interface JwtPayload {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly api = inject(Api);
+  private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
 
   login(credentials: LoginDto): Observable<void> {
-    return this.api.invoke(apiAuthLoginPost, { body: credentials }).pipe(
-      tap((response) => {
-        if (!response.token) {
-          throw new Error('Kein Token erhalten');
-        }
-        this.persistSession(response.token);
-      }),
-      map(() => void 0),
-    );
+    return this.http
+      .post<AuthResponseDto>(`${environment.apiUrl}/api/auth/login`, credentials)
+      .pipe(
+        tap((response) => {
+          if (!response.token) {
+            throw new Error('Kein Token erhalten');
+          }
+          this.persistSession(response.token);
+        }),
+        map(() => void 0),
+      );
   }
 
   registerCompany(data: RegisterCompanyDto): Observable<string> {
-    return this.api.invoke(apiAuthRegisterCompanyPost, { body: data });
+    return this.http.post<string>(
+      `${environment.apiUrl}/api/auth/register-company`,
+      data,
+    );
   }
 
   persistSession(token: string): void {

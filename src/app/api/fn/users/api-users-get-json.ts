@@ -7,23 +7,24 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { User } from '../../models/user';
 
-export interface ApiUsersGet$Params {
+export interface ApiUsersGet$Json$Params {
 }
 
-export function apiUsersGet(http: HttpClient, rootUrl: string, params?: ApiUsersGet$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiUsersGet.PATH, 'get');
+export function apiUsersGet$Json(http: HttpClient, rootUrl: string, params?: ApiUsersGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<User>>> {
+  const rb = new RequestBuilder(rootUrl, apiUsersGet$Json.PATH, 'get');
   if (params) {
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'text/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      return r as StrictHttpResponse<Array<User>>;
     })
   );
 }
 
-apiUsersGet.PATH = '/api/users';
+apiUsersGet$Json.PATH = '/api/users';

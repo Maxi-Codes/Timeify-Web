@@ -7,25 +7,24 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { User } from '../../models/user';
 
-export interface ApiUsersIdGet$Params {
-  id: string;
+export interface ApiUsersGet$Plain$Params {
 }
 
-export function apiUsersIdGet(http: HttpClient, rootUrl: string, params: ApiUsersIdGet$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiUsersIdGet.PATH, 'get');
+export function apiUsersGet$Plain(http: HttpClient, rootUrl: string, params?: ApiUsersGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<User>>> {
+  const rb = new RequestBuilder(rootUrl, apiUsersGet$Plain.PATH, 'get');
   if (params) {
-    rb.path('id', params.id, {});
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
+    rb.build({ responseType: 'text', accept: 'text/plain', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      return r as StrictHttpResponse<Array<User>>;
     })
   );
 }
 
-apiUsersIdGet.PATH = '/api/users/{id}';
+apiUsersGet$Plain.PATH = '/api/users';

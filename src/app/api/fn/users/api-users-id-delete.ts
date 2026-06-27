@@ -7,16 +7,15 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { RegisterCompanyDto } from '../../models/register-company-dto';
 
-export interface ApiAuthRegisterCompanyPost$Params {
-      body?: RegisterCompanyDto
+export interface ApiUsersIdDelete$Params {
+  id: string;
 }
 
-export function apiAuthRegisterCompanyPost(http: HttpClient, rootUrl: string, params?: ApiAuthRegisterCompanyPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiAuthRegisterCompanyPost.PATH, 'post');
+export function apiUsersIdDelete(http: HttpClient, rootUrl: string, params: ApiUsersIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, apiUsersIdDelete.PATH, 'delete');
   if (params) {
-    rb.body(params.body, 'application/*+json');
+    rb.path('id', params.id, {});
   }
 
   return http.request(
@@ -29,4 +28,4 @@ export function apiAuthRegisterCompanyPost(http: HttpClient, rootUrl: string, pa
   );
 }
 
-apiAuthRegisterCompanyPost.PATH = '/api/auth/register-company';
+apiUsersIdDelete.PATH = '/api/users/{id}';

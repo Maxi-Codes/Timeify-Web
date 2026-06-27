@@ -8,6 +8,7 @@ import { Component, input, output } from '@angular/core';
 export class ModalComponent {
   open = input(false);
   title = input('');
+  size = input<'md' | 'lg'>('md');
   closed = output<void>();
 
   onBackdropClick(): void {

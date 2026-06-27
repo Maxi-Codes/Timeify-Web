@@ -1,0 +1,38 @@
+<app-modal [open]="open()" [title]="title()" (closed)="onCancel()">
+  <div class="flex flex-col gap-6">
+    <p class="text-sm leading-relaxed text-text-light">{{ message() }}</p>
+
+    @if (error()) {
+      <p class="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">
+        {{ error() }}
+      </p>
+    }
+
+    @if (variant() === 'danger') {
+      <div
+        class="flex items-start gap-3 rounded-xl border border-red-100 bg-red-50 px-4 py-3"
+      >
+        <span class="text-lg leading-none" aria-hidden="true">⚠️</span>
+        <p class="text-sm text-red-700">
+          Diese Aktion kann nicht rückgängig gemacht werden.
+        </p>
+      </div>
+    }
+
+    <div class="flex justify-end gap-3">
+      @if (showCancel()) {
+        <app-button type="button" variant="outline" [disabled]="isLoading()" (click)="onCancel()">
+          {{ cancelLabel() }}
+        </app-button>
+      }
+      <app-button
+        type="button"
+        [variant]="variant()"
+        [disabled]="isLoading()"
+        (click)="onConfirm()"
+      >
+        {{ isLoading() ? 'Wird gelöscht…' : confirmLabel() }}
+      </app-button>
+    </div>
+  </div>
+</app-modal>
