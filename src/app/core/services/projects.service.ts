@@ -1,45 +1,64 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { Observable, map, switchMap } from 'rxjs';
+import { Api } from '../../api/api';
+import {
+  apiProjectsGet$Json,
+  apiProjectsIdDelete,
+  apiProjectsIdPut$Json,
+  apiProjectsIdStatusPatch$Json,
+  apiProjectsPost$Json,
+  getProjectById$Json,
+} from '../../api/functions';
 import { CreateProjectDto } from '../../api/models/create-project-dto';
 import { Project } from '../../api/models/project';
 import { UpdateProjectDto } from '../../api/models/update-project-dto';
-import { unwrapArray } from '../utils/api-response.util';
 import { AuthService } from '../auth/auth.service';
+import { unwrapArray } from '../utils/api-response.util';
+
+export type UpdateProjectPayload = UpdateProjectDto & { isActive?: boolean };
 
 @Injectable({ providedIn: 'root' })
 export class ProjectsService {
-  private readonly http = inject(HttpClient);
+  private readonly api = inject(Api);
   private readonly auth = inject(AuthService);
-
-  private readonly baseUrl = `${environment.apiUrl}/api/projects`;
 
   getAll(): Observable<Project[]> {
     const companyId = this.auth.getCompanyId();
-
-    return this.http.get<unknown>(this.baseUrl).pipe(
-      map((response) =>
-        unwrapArray<Project>(response).filter(
-          (project) => !companyId || project.companyId === companyId,
-        ),
-      ),
-    );
+    return this.api
+      .invoke(apiProjectsGet$Json, {
+        companyId: companyId ?? undefined,
+      })
+      .pipe(map((response) => unwrapArray<Project>(response)));
   }
 
   getById(id: string): Observable<Project> {
-    return this.http.get<Project>(`${this.baseUrl}/${id}`);
+    return this.api.invoke(getProjectById$Json, { id });
   }
 
   create(data: CreateProjectDto): Observable<Project> {
-    return this.http.post<Project>(this.baseUrl, data);
+    return this.api.invoke(apiProjectsPost$Json, { body: data });
   }
 
-  update(id: string, data: UpdateProjectDto): Observable<void> {
-    return this.http.put<void>(`${this.baseUrl}/${id}`, data);
+  update(id: string, data: UpdateProjectPayload): Observable<Project> {
+    const { isActive, ...project } = data;
+    const update$ = this.api.invoke(apiProjectsIdPut$Json, {
+      id,
+      body: project,
+    });
+
+    return isActive === undefined
+      ? update$
+      : update$.pipe(
+          switchMap(() =>
+            this.api.invoke(apiProjectsIdStatusPatch$Json, {
+              id,
+              body: { isActive },
+            }),
+          ),
+        );
   }
 
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+    return this.api.invoke(apiProjectsIdDelete, { id });
   }
 }

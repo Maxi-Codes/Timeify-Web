@@ -12,6 +12,7 @@ import {
   viewChild,
 } from '@angular/core';
 import * as L from 'leaflet';
+import { ProjectAddress } from '../../../api/models/project-address';
 import { ProjectAddressDto } from '../../../api/models/project-address-dto';
 import { GeoapifyService } from '../../../core/services/geoapify.service';
 import {
@@ -36,7 +37,7 @@ export class ProjectMapComponent implements AfterViewInit, OnDestroy {
   readonly = input(false);
   latitude = input<number | null>(null);
   longitude = input<number | null>(null);
-  address = input<ProjectAddressDto | null>(null);
+  address = input<ProjectAddress | ProjectAddressDto | null>(null);
 
   latitudeChange = output<number>();
   longitudeChange = output<number>();
@@ -51,12 +52,8 @@ export class ProjectMapComponent implements AfterViewInit, OnDestroy {
   private readonly resolvedLatitude = signal<number | null>(null);
   private readonly resolvedLongitude = signal<number | null>(null);
 
-  private readonly displayLatitude = computed(
-    () => this.latitude() ?? this.resolvedLatitude(),
-  );
-  private readonly displayLongitude = computed(
-    () => this.longitude() ?? this.resolvedLongitude(),
-  );
+  private readonly displayLatitude = computed(() => this.latitude() ?? this.resolvedLatitude());
+  private readonly displayLongitude = computed(() => this.longitude() ?? this.resolvedLongitude());
 
   private map?: L.Map;
   private marker?: L.Marker;
@@ -100,9 +97,7 @@ export class ProjectMapComponent implements AfterViewInit, OnDestroy {
     }
 
     if (!this.geoapify.isConfigured()) {
-      this.mapError.set(
-        'Geoapify API Key fehlt. Bitte in environment.geoapifyApiKey eintragen.',
-      );
+      this.mapError.set('Geoapify API Key fehlt. Bitte in environment.geoapifyApiKey eintragen.');
       return;
     }
 
@@ -182,9 +177,7 @@ export class ProjectMapComponent implements AfterViewInit, OnDestroy {
       error: () => {
         this.isGeocoding.set(false);
         if (this.readonly()) {
-          this.mapError.set(
-            'Standort konnte für diese Adresse nicht ermittelt werden.',
-          );
+          this.mapError.set('Standort konnte für diese Adresse nicht ermittelt werden.');
         }
       },
     });
@@ -253,9 +246,7 @@ export class ProjectMapComponent implements AfterViewInit, OnDestroy {
     if (this.marker) {
       this.marker.setLatLng(position);
     } else {
-      this.marker = L.marker(position, { icon: this.createMarkerIcon() }).addTo(
-        this.map,
-      );
+      this.marker = L.marker(position, { icon: this.createMarkerIcon() }).addTo(this.map);
     }
 
     this.map.setView(position, MARKER_ZOOM);

@@ -7,4 +7,5 @@ export interface CreateTimeEntryDto {
   date?: string;
   minutesWorked?: number;
   projectId?: string;
+  userId?: string;
 }

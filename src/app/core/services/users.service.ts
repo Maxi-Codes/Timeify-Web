@@ -2,7 +2,10 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { Api } from '../../api/api';
+import { apiAuthRegisterUserPost } from '../../api/functions';
 import { RegisterUserDto } from '../../api/models/register-user-dto';
+import { Role } from '../../api/models/role';
 import { User } from '../../api/models/user';
 import { unwrapArray } from '../utils/api-response.util';
 import { AuthService } from '../auth/auth.service';
@@ -11,7 +14,7 @@ export interface UpdateUserDto {
   firstName: string;
   lastName: string;
   email: string;
-  role: number;
+  role: Role;
   password?: string;
 }
 
@@ -25,6 +28,7 @@ export const ROLE_LABELS: Record<number, string> = {
 @Injectable({ providedIn: 'root' })
 export class UsersService {
   private readonly http = inject(HttpClient);
+  private readonly api = inject(Api);
   private readonly auth = inject(AuthService);
 
   private readonly baseUrl = `${environment.apiUrl}/api/users`;
@@ -32,13 +36,13 @@ export class UsersService {
   getAll(): Observable<User[]> {
     const companyId = this.auth.getCompanyId();
 
-    return this.http.get<unknown>(this.baseUrl).pipe(
-      map((response) =>
-        unwrapArray<User>(response).filter(
-          (user) => !companyId || user.companyId === companyId,
+    return this.http
+      .get<unknown>(this.baseUrl)
+      .pipe(
+        map((response) =>
+          unwrapArray<User>(response).filter((user) => !companyId || user.companyId === companyId),
         ),
-      ),
-    );
+      );
   }
 
   getById(id: string): Observable<User> {
@@ -53,11 +57,8 @@ export class UsersService {
     return this.getById(userId);
   }
 
-  create(data: RegisterUserDto): Observable<RegisterUserDto> {
-    return this.http.post<RegisterUserDto>(
-      `${environment.apiUrl}/api/auth/register-user`,
-      data,
-    );
+  create(data: RegisterUserDto): Observable<void> {
+    return this.api.invoke(apiAuthRegisterUserPost, { body: data });
   }
 
   update(id: string, data: UpdateUserDto): Observable<User> {

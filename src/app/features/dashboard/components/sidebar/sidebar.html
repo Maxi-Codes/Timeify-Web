@@ -1,25 +1,27 @@
 <aside
-  class="flex h-screen w-64 shrink-0 flex-col bg-primary text-white shadow-xl"
+  class="flex h-screen w-16 shrink-0 flex-col bg-primary text-white shadow-xl transition-[width] duration-200 md:w-64"
 >
   <!-- Logo -->
-  <div class="border-b border-white/10 px-6 py-6">
-    <a routerLink="/dashboard" class="flex items-center gap-3">
+  <div class="border-b border-white/10 px-3 py-6 md:px-6">
+    <a
+      routerLink="/dashboard"
+      aria-label="Timeify Dashboard"
+      class="flex items-center justify-center gap-3 md:justify-start"
+    >
       <img
         [src]="logoUrl"
         alt="Timeify Logo"
-        class="h-10 w-10 rounded-xl bg-white/10 object-contain p-1"
+        class="h-10 w-10 rounded-xl bg-white object-contain p-1"
       />
-      <div>
-        <p class="text-lg font-bold leading-tight">
-          Time<span class="text-secondary">ify</span>
-        </p>
+      <div class="hidden md:block">
+        <p class="text-lg font-bold leading-tight">Time<span class="text-secondary">ify</span></p>
         <p class="text-xs text-white/50">Zeiterfassung</p>
       </div>
     </a>
   </div>
 
   <!-- Hauptnavigation -->
-  <nav class="flex-1 overflow-y-auto px-3 py-4">
+  <nav aria-label="Hauptnavigation" class="flex-1 overflow-y-auto px-2 py-4 md:px-3">
     <ul class="space-y-1">
       @for (item of mainNavItems; track item.route) {
         <li>
@@ -27,10 +29,12 @@
             [routerLink]="item.route"
             routerLinkActive="bg-secondary text-white shadow-md"
             [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
-            class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-white/70 transition-all duration-200 hover:bg-white/10 hover:text-white"
+            [attr.aria-label]="item.label"
+            [attr.title]="item.label"
+            class="flex items-center justify-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-white/70 transition-all duration-200 hover:bg-white/10 hover:text-white md:justify-start"
           >
             <span class="text-base leading-none" aria-hidden="true">{{ item.icon }}</span>
-            {{ item.label }}
+            <span class="hidden md:inline">{{ item.label }}</span>
           </a>
         </li>
       }
@@ -38,23 +42,27 @@
   </nav>
 
   <!-- Einstellungen + Abmelden -->
-  <div class="border-t border-white/10 px-3 py-4">
+  <div class="border-t border-white/10 px-2 py-4 md:px-3">
     <a
       [routerLink]="settingsItem.route"
       routerLinkActive="bg-secondary text-white shadow-md"
-      class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-white/70 transition-all duration-200 hover:bg-white/10 hover:text-white"
+      [attr.aria-label]="settingsItem.label"
+      [attr.title]="settingsItem.label"
+      class="flex items-center justify-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-white/70 transition-all duration-200 hover:bg-white/10 hover:text-white md:justify-start"
     >
       <span class="text-base leading-none" aria-hidden="true">{{ settingsItem.icon }}</span>
-      {{ settingsItem.label }}
+      <span class="hidden md:inline">{{ settingsItem.label }}</span>
     </a>
 
     <button
       type="button"
       (click)="logout()"
-      class="mt-2 flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-white/40 transition-all duration-200 hover:bg-white/10 hover:text-white/70"
+      aria-label="Abmelden"
+      title="Abmelden"
+      class="mt-2 flex w-full cursor-pointer items-center justify-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-white/40 transition-all duration-200 hover:bg-white/10 hover:text-white/70 md:justify-start"
     >
       <span class="text-base leading-none" aria-hidden="true">↩</span>
-      Abmelden
+      <span class="hidden md:inline">Abmelden</span>
     </button>
   </div>
 </aside>

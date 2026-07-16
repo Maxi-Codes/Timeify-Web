@@ -99,16 +99,36 @@
       formControlName="description"
     />
 
-    <app-input label="Straße" placeholder="Musterstraße" formControlName="street" />
+    <app-input
+      label="Straße"
+      placeholder="Musterstraße"
+      formControlName="street"
+      [error]="fieldError('street')"
+    />
 
     <div class="grid gap-4 sm:grid-cols-2">
       <app-input label="Hausnummer" placeholder="12" formControlName="houseNumber" />
-      <app-input label="PLZ" placeholder="12345" formControlName="postalCode" />
+      <app-input
+        label="PLZ"
+        placeholder="12345"
+        formControlName="postalCode"
+        [error]="fieldError('postalCode')"
+      />
     </div>
 
     <div class="grid gap-4 sm:grid-cols-2">
-      <app-input label="Stadt" placeholder="Berlin" formControlName="city" />
-      <app-input label="Land" placeholder="Deutschland" formControlName="country" />
+      <app-input
+        label="Stadt"
+        placeholder="Berlin"
+        formControlName="city"
+        [error]="fieldError('city')"
+      />
+      <app-input
+        label="Land"
+        placeholder="Deutschland"
+        formControlName="country"
+        [error]="fieldError('country')"
+      />
     </div>
 
     <app-project-map

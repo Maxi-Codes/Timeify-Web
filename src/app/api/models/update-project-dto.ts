@@ -3,8 +3,7 @@
 
 import { ProjectAddressDto } from '../models/project-address-dto';
 export interface UpdateProjectDto {
-  address?: ProjectAddressDto;
+  address: ProjectAddressDto;
   description?: string | null;
-  isActive?: boolean;
-  name?: string | null;
+  name: string;
 }

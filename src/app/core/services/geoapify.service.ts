@@ -67,22 +67,18 @@ export class GeoapifyService {
       .pipe(map((response) => this.mapResult(response, lat, lng)));
   }
 
-  private mapResult(
-    response: GeoapifyResponse,
-    lat?: number,
-    lng?: number,
-  ): GeocodedLocation {
+  private mapResult(response: GeoapifyResponse, lat?: number, lng?: number): GeocodedLocation {
     const result = response.results?.[0];
     if (!result) {
       throw new Error('Kein Ergebnis gefunden');
     }
 
     return {
-      street: result.street ?? null,
+      street: result.street ?? '',
       houseNumber: result.housenumber ?? null,
-      postalCode: result.postcode ?? null,
-      city: result.city ?? null,
-      country: result.country ?? null,
+      postalCode: result.postcode ?? '',
+      city: result.city ?? '',
+      country: result.country ?? '',
       latitude: lat ?? result.lat,
       longitude: lng ?? result.lon,
     };

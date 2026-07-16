@@ -7,16 +7,15 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { LoginDto } from '../../models/login-dto';
 
-export interface ApiAuthLoginPost$Params {
-      body?: LoginDto
+export interface ApiProjectsIdDelete$Params {
+  id: string;
 }
 
-export function apiAuthLoginPost(http: HttpClient, rootUrl: string, params?: ApiAuthLoginPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiAuthLoginPost.PATH, 'post');
+export function apiProjectsIdDelete(http: HttpClient, rootUrl: string, params: ApiProjectsIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, apiProjectsIdDelete.PATH, 'delete');
   if (params) {
-    rb.body(params.body, 'application/*+json');
+    rb.path('id', params.id, {});
   }
 
   return http.request(
@@ -29,4 +28,4 @@ export function apiAuthLoginPost(http: HttpClient, rootUrl: string, params?: Api
   );
 }
 
-apiAuthLoginPost.PATH = '/api/auth/login';
+apiProjectsIdDelete.PATH = '/api/projects/{id}';

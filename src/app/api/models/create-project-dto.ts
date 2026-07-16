@@ -3,8 +3,8 @@
 
 import { ProjectAddressDto } from '../models/project-address-dto';
 export interface CreateProjectDto {
-  address?: ProjectAddressDto;
+  address: ProjectAddressDto;
   companyId?: string;
   description?: string | null;
-  name?: string | null;
+  name: string;
 }

@@ -1,44 +1,229 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.0.4",
   "info": {
-    "title": "zeitwerk-backend",
+    "title": "timeify-rest",
     "version": "1.0"
   },
   "paths": {
     "/api/absences": {
       "get": {
-        "tags": [
-          "Absences"
+        "tags": ["Absence"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/AbsenceStatus"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Absence"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Absence"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Absence"
+                  }
+                }
+              }
+            }
           }
         }
       },
       "post": {
-        "tags": [
-          "Absences"
+        "tags": ["Absence"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAbsenceDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAbsenceDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAbsenceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Absence"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Absence"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Absence"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/absences/{id}": {
+      "get": {
+        "tags": ["Absence"],
+        "operationId": "GetAbsenceById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Absence"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Absence"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Absence"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Absence"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Absence"
+                "$ref": "#/components/schemas/UpdateAbsenceDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Absence"
+                "$ref": "#/components/schemas/UpdateAbsenceDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Absence"
+                "$ref": "#/components/schemas/UpdateAbsenceDto"
               }
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Absence"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Absence"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Absence"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Absence"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -46,11 +231,113 @@
         }
       }
     },
+    "/api/absences/user/{userId}": {
+      "get": {
+        "tags": ["Absence"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Absence"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Absence"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Absence"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/absences/{id}/status": {
+      "patch": {
+        "tags": ["Absence"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAbsenceStatusDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAbsenceStatusDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAbsenceStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Absence"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Absence"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Absence"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/auth/register-company": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "requestBody": {
           "content": {
             "application/json": {
@@ -79,9 +366,7 @@
     },
     "/api/auth/login": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "requestBody": {
           "content": {
             "application/json": {
@@ -103,16 +388,31 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseDto"
+                }
+              }
+            }
           }
         }
       }
     },
     "/api/auth/register-user": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "requestBody": {
           "content": {
             "application/json": {
@@ -132,18 +432,6 @@
             }
           }
         },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/companies": {
-      "get": {
-        "tags": [
-          "Companies"
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -153,8 +441,23 @@
     },
     "/api/projects": {
       "get": {
-        "tags": [
-          "Projects"
+        "tags": ["Project"],
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "isActive",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
         ],
         "responses": {
           "200": {
@@ -189,9 +492,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Project"],
         "requestBody": {
           "content": {
             "application/json": {
@@ -237,9 +538,8 @@
     },
     "/api/projects/{id}": {
       "get": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Project"],
+        "operationId": "GetProjectById",
         "parameters": [
           {
             "name": "id",
@@ -275,9 +575,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Project"],
         "parameters": [
           {
             "name": "id",
@@ -310,14 +608,29 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
           }
         }
       },
       "delete": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Project"],
         "parameters": [
           {
             "name": "id",
@@ -336,73 +649,185 @@
         }
       }
     },
-    "/api/timeentries": {
-      "post": {
-        "tags": [
-          "TimeEntries"
+    "/api/projects/activeProjects": {
+      "get": {
+        "tags": ["Project"],
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Project"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Project"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Project"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/activeProjectsCount": {
+      "get": {
+        "tags": ["Project"],
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{id}/status": {
+      "patch": {
+        "tags": ["Project"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateTimeEntryDto"
+                "$ref": "#/components/schemas/UpdateProjectStatusDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateTimeEntryDto"
+                "$ref": "#/components/schemas/UpdateProjectStatusDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateTimeEntryDto"
+                "$ref": "#/components/schemas/UpdateProjectStatusDto"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
           }
         }
       }
     },
-    "/api/timeentries/{year}/{month}": {
+    "/api/time-entries": {
       "get": {
-        "tags": [
-          "TimeEntries"
-        ],
+        "tags": ["TimeEntry"],
         "parameters": [
           {
-            "name": "year",
-            "in": "path",
-            "required": true,
+            "name": "userId",
+            "in": "query",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string",
+              "format": "uuid"
             }
           },
           {
-            "name": "month",
-            "in": "path",
-            "required": true,
+            "name": "projectId",
+            "in": "query",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
             }
           }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/users": {
-      "get": {
-        "tags": [
-          "Users"
         ],
         "responses": {
           "200": {
@@ -412,7 +837,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/User"
+                    "$ref": "#/components/schemas/TimeEntry"
                   }
                 }
               },
@@ -420,7 +845,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/User"
+                    "$ref": "#/components/schemas/TimeEntry"
                   }
                 }
               },
@@ -428,8 +853,52 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/User"
+                    "$ref": "#/components/schemas/TimeEntry"
                   }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["TimeEntry"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTimeEntryDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTimeEntryDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTimeEntryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeEntry"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeEntry"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeEntry"
                 }
               }
             }
@@ -437,11 +906,10 @@
         }
       }
     },
-    "/api/users/{id}": {
+    "/api/time-entries/{id}": {
       "get": {
-        "tags": [
-          "Users"
-        ],
+        "tags": ["TimeEntry"],
+        "operationId": "GetTimeEntryById",
         "parameters": [
           {
             "name": "id",
@@ -459,17 +927,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/TimeEntry"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/TimeEntry"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/TimeEntry"
                 }
               }
             }
@@ -477,9 +945,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Users"
-        ],
+        "tags": ["TimeEntry"],
         "parameters": [
           {
             "name": "id",
@@ -495,31 +961,46 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateUserDto"
+                "$ref": "#/components/schemas/UpdateTimeEntryDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateUserDto"
+                "$ref": "#/components/schemas/UpdateTimeEntryDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateUserDto"
+                "$ref": "#/components/schemas/UpdateTimeEntryDto"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeEntry"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeEntry"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeEntry"
+                }
+              }
+            }
           }
         }
       },
       "delete": {
-        "tags": [
-          "Users"
-        ],
+        "tags": ["TimeEntry"],
         "parameters": [
           {
             "name": "id",
@@ -534,6 +1015,132 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/time-entries/user/{userId}": {
+      "get": {
+        "tags": ["TimeEntry"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TimeEntry"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TimeEntry"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TimeEntry"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/time-entries/project/{projectId}": {
+      "get": {
+        "tags": ["TimeEntry"],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TimeEntry"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TimeEntry"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TimeEntry"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -577,24 +1184,24 @@
         "additionalProperties": false
       },
       "AbsenceStatus": {
-        "enum": [
-          0,
-          1,
-          2,
-          3
-        ],
+        "enum": [0, 1, 2, 3],
         "type": "integer",
         "format": "int32"
       },
       "AbsenceType": {
-        "enum": [
-          0,
-          1,
-          2,
-          3
-        ],
+        "enum": [0, 1, 2, 3],
         "type": "integer",
         "format": "int32"
+      },
+      "AuthResponseDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
       },
       "Company": {
         "type": "object",
@@ -642,11 +1249,45 @@
               "$ref": "#/components/schemas/User"
             },
             "nullable": true
+          },
+          "projects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Project"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateAbsenceDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "$ref": "#/components/schemas/AbsenceType"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "attachmentUrl": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true
           }
         },
         "additionalProperties": false
       },
       "CreateProjectDto": {
+        "required": ["address", "name"],
         "type": "object",
         "properties": {
           "companyId": {
@@ -654,8 +1295,8 @@
             "format": "uuid"
           },
           "name": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "description": {
             "type": "string",
@@ -670,6 +1311,10 @@
       "CreateTimeEntryDto": {
         "type": "object",
         "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
           "projectId": {
             "type": "string",
             "format": "uuid"
@@ -679,14 +1324,19 @@
             "format": "date"
           },
           "minutesWorked": {
+            "maximum": 1440,
+            "minimum": 1,
             "type": "integer",
             "format": "int32"
           },
           "breakMinutes": {
+            "maximum": 1440,
+            "minimum": 0,
             "type": "integer",
             "format": "int32"
           },
           "comment": {
+            "maxLength": 1000,
             "type": "string",
             "nullable": true
           }
@@ -724,15 +1374,17 @@
         "additionalProperties": false
       },
       "LoginDto": {
+        "required": ["email", "password"],
         "type": "object",
         "properties": {
           "email": {
+            "minLength": 1,
             "type": "string",
-            "nullable": true
+            "format": "email"
           },
           "password": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -813,34 +1465,39 @@
         "additionalProperties": false
       },
       "ProjectAddressDto": {
+        "required": ["city", "country", "postalCode", "street"],
         "type": "object",
         "properties": {
           "street": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "houseNumber": {
             "type": "string",
             "nullable": true
           },
           "postalCode": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "city": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "country": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "latitude": {
+            "maximum": 90,
+            "minimum": -90,
             "type": "number",
             "format": "double",
             "nullable": true
           },
           "longitude": {
+            "maximum": 180,
+            "minimum": -180,
             "type": "number",
             "format": "double",
             "nullable": true
@@ -849,11 +1506,12 @@
         "additionalProperties": false
       },
       "RegisterCompanyDto": {
+        "required": ["adminEmail", "companyName", "firstName", "lastName", "password"],
         "type": "object",
         "properties": {
           "companyName": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "street": {
             "type": "string",
@@ -878,25 +1536,27 @@
             "nullable": true
           },
           "adminEmail": {
+            "minLength": 1,
             "type": "string",
-            "nullable": true
+            "format": "email"
           },
           "password": {
-            "type": "string",
-            "nullable": true
+            "minLength": 8,
+            "type": "string"
           },
           "firstName": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "lastName": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           }
         },
         "additionalProperties": false
       },
       "RegisterUserDto": {
+        "required": ["email", "firstName", "lastName", "password", "role"],
         "type": "object",
         "properties": {
           "companyId": {
@@ -904,35 +1564,30 @@
             "format": "uuid"
           },
           "email": {
+            "minLength": 1,
             "type": "string",
-            "nullable": true
+            "format": "email"
           },
           "password": {
-            "type": "string",
-            "nullable": true
+            "minLength": 8,
+            "type": "string"
           },
           "firstName": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "lastName": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "role": {
-            "type": "integer",
-            "format": "int32"
+            "$ref": "#/components/schemas/Role"
           }
         },
         "additionalProperties": false
       },
       "Role": {
-        "enum": [
-          0,
-          1,
-          2,
-          3
-        ],
+        "enum": [0, 1, 2, 3],
         "type": "integer",
         "format": "int32"
       },
@@ -976,12 +1631,44 @@
         },
         "additionalProperties": false
       },
+      "UpdateAbsenceDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/AbsenceType"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "attachmentUrl": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateAbsenceStatusDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/AbsenceStatus"
+          }
+        },
+        "additionalProperties": false
+      },
       "UpdateProjectDto": {
+        "required": ["address", "name"],
         "type": "object",
         "properties": {
           "name": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "description": {
             "type": "string",
@@ -989,33 +1676,45 @@
           },
           "address": {
             "$ref": "#/components/schemas/ProjectAddressDto"
-          },
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateProjectStatusDto": {
+        "required": ["isActive"],
+        "type": "object",
+        "properties": {
           "isActive": {
             "type": "boolean"
           }
         },
         "additionalProperties": false
       },
-      "UpdateUserDto": {
+      "UpdateTimeEntryDto": {
         "type": "object",
         "properties": {
-          "firstName": {
+          "projectId": {
             "type": "string",
-            "nullable": true
+            "format": "uuid"
           },
-          "lastName": {
+          "date": {
             "type": "string",
-            "nullable": true
+            "format": "date"
           },
-          "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "role": {
+          "minutesWorked": {
+            "maximum": 1440,
+            "minimum": 1,
             "type": "integer",
             "format": "int32"
           },
-          "password": {
+          "breakMinutes": {
+            "maximum": 1440,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "comment": {
+            "maxLength": 1000,
             "type": "string",
             "nullable": true
           }
@@ -1076,5 +1775,19 @@
         "additionalProperties": false
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "Absence"
+    },
+    {
+      "name": "Auth"
+    },
+    {
+      "name": "Project"
+    },
+    {
+      "name": "TimeEntry"
+    }
+  ]
 }

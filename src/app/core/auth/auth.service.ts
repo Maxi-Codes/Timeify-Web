@@ -1,17 +1,14 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, map, tap } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { Api } from '../../api/api';
+import { apiAuthLoginPost$Json, apiAuthRegisterCompanyPost } from '../../api/functions';
+import { AuthResponseDto } from '../../api/models/auth-response-dto';
 import { LoginDto } from '../../api/models/login-dto';
 import { RegisterCompanyDto } from '../../api/models/register-company-dto';
 import { jwtDecode } from 'jwt-decode';
 
 const TOKEN_KEY = 'timeify_access_token';
-
-interface AuthResponseDto {
-  token?: string | null;
-}
 
 interface JwtPayload {
   userId: string;
@@ -24,28 +21,23 @@ interface JwtPayload {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly http = inject(HttpClient);
+  private readonly api = inject(Api);
   private readonly router = inject(Router);
 
   login(credentials: LoginDto): Observable<void> {
-    return this.http
-      .post<AuthResponseDto>(`${environment.apiUrl}/api/auth/login`, credentials)
-      .pipe(
-        tap((response) => {
-          if (!response.token) {
-            throw new Error('Kein Token erhalten');
-          }
-          this.persistSession(response.token);
-        }),
-        map(() => void 0),
-      );
+    return this.api.invoke(apiAuthLoginPost$Json, { body: credentials }).pipe(
+      tap((response) => {
+        if (!response.token) {
+          throw new Error('Kein Token erhalten');
+        }
+        this.persistSession(response.token);
+      }),
+      map(() => void 0),
+    );
   }
 
-  registerCompany(data: RegisterCompanyDto): Observable<string> {
-    return this.http.post<string>(
-      `${environment.apiUrl}/api/auth/register-company`,
-      data,
-    );
+  registerCompany(data: RegisterCompanyDto): Observable<void> {
+    return this.api.invoke(apiAuthRegisterCompanyPost, { body: data });
   }
 
   persistSession(token: string): void {
@@ -80,9 +72,7 @@ export class AuthService {
 
   getRole(): string | null {
     return (
-      this.getJwtPayload()?.[
-        'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
-      ] ?? null
+      this.getJwtPayload()?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ?? null
     );
   }
 }

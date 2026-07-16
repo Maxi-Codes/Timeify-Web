@@ -48,11 +48,11 @@ export class ProjectsPage implements OnInit {
   readonly form = this.fb.group({
     name: ['', Validators.required],
     description: [''],
-    street: [''],
+    street: ['', Validators.required],
     houseNumber: [''],
-    postalCode: [''],
-    city: [''],
-    country: ['Deutschland'],
+    postalCode: ['', Validators.required],
+    city: ['', Validators.required],
+    country: ['Deutschland', Validators.required],
     latitude: [null as number | null],
     longitude: [null as number | null],
     isActive: [true],
@@ -61,11 +61,11 @@ export class ProjectsPage implements OnInit {
   readonly formAddress = computed<ProjectAddressDto>(() => {
     const raw = this.form.getRawValue();
     return {
-      street: raw.street || null,
+      street: raw.street || '',
       houseNumber: raw.houseNumber || null,
-      postalCode: raw.postalCode || null,
-      city: raw.city || null,
-      country: raw.country || null,
+      postalCode: raw.postalCode || '',
+      city: raw.city || '',
+      country: raw.country || '',
       latitude: raw.latitude,
       longitude: raw.longitude,
     };
@@ -194,11 +194,11 @@ export class ProjectsPage implements OnInit {
     }
 
     const address: ProjectAddressDto = {
-      street: raw.street || null,
+      street: raw.street || '',
       houseNumber: raw.houseNumber || null,
-      postalCode: raw.postalCode || null,
-      city: raw.city || null,
-      country: raw.country || null,
+      postalCode: raw.postalCode || '',
+      city: raw.city || '',
+      country: raw.country || '',
       latitude: raw.latitude,
       longitude: raw.longitude,
     };
@@ -211,7 +211,7 @@ export class ProjectsPage implements OnInit {
     if (editing?.id) {
       this.projectsService
         .update(editing.id, {
-          name: raw.name,
+          name: raw.name || '',
           description: raw.description || null,
           address,
           isActive: raw.isActive ?? true,
@@ -233,7 +233,7 @@ export class ProjectsPage implements OnInit {
     this.projectsService
       .create({
         companyId,
-        name: raw.name,
+        name: raw.name || '',
         description: raw.description || null,
         address,
       })
@@ -293,7 +293,7 @@ export class ProjectsPage implements OnInit {
     return buildAddressString(project?.address) || '—';
   }
 
-  fieldError(field: 'name'): string {
+  fieldError(field: 'name' | 'street' | 'postalCode' | 'city' | 'country'): string {
     const control = this.form.controls[field];
     if (!control.touched || !control.errors) return '';
     if (control.errors['required']) return 'Pflichtfeld';

@@ -1,12 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { User } from '../../../../api/models/user';
+import { Role } from '../../../../api/models/role';
 import { AuthService } from '../../../../core/auth/auth.service';
-import {
-  ROLE_LABELS,
-  UpdateUserDto,
-  UsersService,
-} from '../../../../core/services/users.service';
+import { ROLE_LABELS, UpdateUserDto, UsersService } from '../../../../core/services/users.service';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog';
 import { ButtonComponent } from '../../../../shared/components/button/button';
 import { InputComponent } from '../../../../shared/components/input/input';
@@ -15,7 +12,13 @@ import { ModalComponent } from '../../../../shared/components/modal/modal';
 @Component({
   selector: 'app-employees',
   standalone: true,
-  imports: [ReactiveFormsModule, ButtonComponent, InputComponent, ModalComponent, ConfirmDialogComponent],
+  imports: [
+    ReactiveFormsModule,
+    ButtonComponent,
+    InputComponent,
+    ModalComponent,
+    ConfirmDialogComponent,
+  ],
   templateUrl: './employees.html',
 })
 export class EmployeesPage implements OnInit {
@@ -72,10 +75,7 @@ export class EmployeesPage implements OnInit {
       password: '',
       role: 3,
     });
-    this.form.controls.password.setValidators([
-      Validators.required,
-      Validators.minLength(8),
-    ]);
+    this.form.controls.password.setValidators([Validators.required, Validators.minLength(8)]);
     this.form.controls.password.updateValueAndValidity();
     this.errorMessage.set('');
     this.modalOpen.set(true);
@@ -116,7 +116,7 @@ export class EmployeesPage implements OnInit {
         firstName: raw.firstName,
         lastName: raw.lastName,
         email: raw.email,
-        role: raw.role,
+        role: raw.role as Role,
       };
       if (raw.password) {
         payload.password = raw.password;
@@ -150,7 +150,7 @@ export class EmployeesPage implements OnInit {
         lastName: raw.lastName,
         email: raw.email,
         password: raw.password,
-        role: raw.role,
+        role: raw.role as Role,
       })
       .subscribe({
         next: () => {

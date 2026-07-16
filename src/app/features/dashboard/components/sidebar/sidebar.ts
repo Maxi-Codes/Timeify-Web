@@ -22,8 +22,7 @@ export class SidebarComponent {
   readonly mainNavItems: SidebarNavItem[] = [
     { label: 'Dashboard', icon: '🏠', route: '/dashboard' },
     { label: 'Zeiterfassung', icon: '📅', route: '/dashboard/zeiterfassung' },
-    { label: 'Krankmeldungen', icon: '🤧', route: '/dashboard/krankmeldungen' },
-    { label: 'Urlaubsanträge', icon: '🏝️', route: '/dashboard/urlaub'},
+    { label: 'Abwesenheiten', icon: '🏝️', route: '/dashboard/abwesenheiten' },
     { label: 'Projekte', icon: '📂', route: '/dashboard/projekte' },
     { label: 'Mitarbeiter', icon: '👷', route: '/dashboard/mitarbeiter' },
     { label: 'Auswertungen', icon: '📊', route: '/dashboard/auswertungen' },
