@@ -1,19 +1,11 @@
-import {
-  Component,
-  ElementRef,
-  HostListener,
-  ViewChild,
-  signal, inject,
-} from '@angular/core';
-import { ButtonComponent } from '../../../../shared/components/button/button';
-import { Router } from '@angular/router';
+import { Component, ElementRef, HostListener, ViewChild, signal } from '@angular/core';
 
 @Component({
   selector: 'app-hero',
   standalone: true,
   templateUrl: './hero.html',
   styleUrl: './hero.css',
-  imports: [ButtonComponent],
+  imports: [],
 })
 export class HeroComponent {
   @ViewChild('heroSection', { static: true })
@@ -25,8 +17,6 @@ export class HeroComponent {
   readonly translateY = signal('0%');
   readonly opacity = signal(1);
 
-  private readonly router = inject(Router);
-
   @HostListener('window:scroll')
   onWindowScroll(): void {
     const element = this.heroSection.nativeElement;
@@ -37,13 +27,4 @@ export class HeroComponent {
     this.translateY.set(`${progress * 50}%`);
     this.opacity.set(progress <= 0.5 ? 1 - progress * 2 : 0);
   }
-
-  goToRegister(): void {
-    this.router.navigate(['/register']);
-  }
-
-  goToLogin(): void {
-    this.router.navigate(['/login']);
-  }
-
 }

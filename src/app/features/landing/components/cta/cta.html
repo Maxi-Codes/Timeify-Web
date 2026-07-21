@@ -1,46 +1,100 @@
-<section class="py-32 px-6">
+<section class="px-6 py-24 md:py-32">
   <div
-    class="cta-card relative mx-auto max-w-5xl overflow-hidden rounded-[3rem] bg-[#0B1F3A] p-16 text-center"
+    class="cta-card relative mx-auto max-w-5xl overflow-hidden rounded-[3rem] bg-[#0B1F3A] px-6 py-12 text-center md:p-16"
   >
-    <!-- Sparkle rechts -->
     <svg
       class="sparkle sparkle-right absolute right-10 top-10 h-24 w-24 text-[#F59E0B]/20"
       viewBox="0 0 24 24"
       fill="currentColor"
+      aria-hidden="true"
     >
-      <path
-        d="M12 2l1.7 5.3L19 9l-5.3 1.7L12 16l-1.7-5.3L5 9l5.3-1.7L12 2z"
-      />
+      <path d="M12 2l1.7 5.3L19 9l-5.3 1.7L12 16l-1.7-5.3L5 9l5.3-1.7L12 2z" />
     </svg>
 
-    <!-- Sparkle links -->
     <svg
       class="sparkle sparkle-left absolute bottom-10 left-10 h-32 w-32 text-[#F59E0B]/20"
       viewBox="0 0 24 24"
       fill="currentColor"
+      aria-hidden="true"
     >
-      <path
-        d="M12 2l1.7 5.3L19 9l-5.3 1.7L12 16l-1.7-5.3L5 9l5.3-1.7L12 2z"
-      />
+      <path d="M12 2l1.7 5.3L19 9l-5.3 1.7L12 16l-1.7-5.3L5 9l5.3-1.7L12 2z" />
     </svg>
 
-    <div class="fade-up">
-      <div
-        class="mb-6 inline-block rounded-full bg-[#F59E0B]/20 px-6 py-2 text-[#F59E0B]"
-      >
+    <div class="fade-up relative z-10">
+      <div class="mb-6 inline-block rounded-full bg-[#F59E0B]/20 px-6 py-2 text-[#F59E0B]">
         Bald verfügbar
       </div>
 
-      <h2 class="mb-6 text-5xl font-semibold text-white md:text-6xl">
-        Stay tuned
-      </h2>
+      <h2 class="mb-6 text-4xl font-semibold text-white md:text-6xl">Stay tuned</h2>
 
-      <p class="mx-auto mb-10 max-w-2xl text-xl text-white/80">
-        Wir arbeiten mit Hochdruck an Timeify. Sei einer der Ersten, der von
-        der Revolution in der Zeiterfassung erfährt.
+      <p class="mx-auto mb-10 max-w-2xl text-lg text-white/80 md:text-xl">
+        Wir arbeiten mit Hochdruck an Timeify. Erfahre als einer der Ersten von Neuigkeiten rund um
+        unsere digitale Zeiterfassung.
       </p>
 
-      <app-button size="lg">Benachrichtigen lassen</app-button>
+      @if (isSubscribed()) {
+        <div
+          class="mx-auto max-w-xl rounded-2xl border border-green-300/30 bg-green-400/10 px-6 py-5"
+          role="status"
+        >
+          <p class="text-lg font-semibold text-white">✓ Du bist dabei!</p>
+          <p class="mt-1 text-sm text-white/70">
+            Deine E-Mail-Adresse wurde erfolgreich für den Newsletter angemeldet.
+          </p>
+        </div>
+      } @else {
+        <form class="mx-auto max-w-xl text-left" [formGroup]="form" (ngSubmit)="subscribe()">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-start">
+            <div class="flex-1">
+              <label for="newsletter-email" class="sr-only">E-Mail-Adresse</label>
+              <input
+                id="newsletter-email"
+                type="email"
+                formControlName="email"
+                autocomplete="email"
+                placeholder="deine@email.de"
+                class="w-full rounded-full border bg-white px-5 py-4 text-[#111827] outline-none transition placeholder:text-slate-400 focus:border-[#F59E0B] focus:ring-2 focus:ring-[#F59E0B]/30"
+                [class.border-red-400]="emailError()"
+                [class.border-transparent]="!emailError()"
+                [attr.aria-invalid]="!!emailError()"
+                aria-describedby="newsletter-email-error"
+              />
+              @if (emailError()) {
+                <p id="newsletter-email-error" class="mt-2 pl-3 text-sm text-red-300">
+                  {{ emailError() }}
+                </p>
+              }
+            </div>
+            <app-button type="submit" size="lg" [disabled]="isSubmitting()">
+              {{ isSubmitting() ? 'Wird angemeldet…' : 'Benachrichtigen lassen' }}
+            </app-button>
+          </div>
+
+          <label class="mt-4 flex cursor-pointer items-start gap-3 text-sm text-white/70">
+            <input
+              type="checkbox"
+              formControlName="consent"
+              class="mt-0.5 h-4 w-4 shrink-0 accent-[#F59E0B]"
+            />
+            <span>
+              Ich möchte per E-Mail Neuigkeiten zu Timeify erhalten. Die Einwilligung kann ich
+              jederzeit widerrufen.
+            </span>
+          </label>
+          @if (consentError()) {
+            <p class="mt-2 pl-7 text-sm text-red-300">{{ consentError() }}</p>
+          }
+
+          @if (submitError()) {
+            <p
+              class="mt-4 rounded-xl bg-red-400/10 px-4 py-3 text-center text-sm text-red-200"
+              role="alert"
+            >
+              {{ submitError() }}
+            </p>
+          }
+        </form>
+      }
     </div>
   </div>
 </section>

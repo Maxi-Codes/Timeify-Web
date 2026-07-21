@@ -11,6 +11,7 @@ export type { CreateProjectDto } from './models/create-project-dto';
 export type { CreateTimeEntryDto } from './models/create-time-entry-dto';
 export type { EmploymentContract } from './models/employment-contract';
 export type { LoginDto } from './models/login-dto';
+export type { NewsletterSubscriptionDto } from './models/newsletter-subscription-dto';
 export type { Project } from './models/project';
 export type { ProjectAddress } from './models/project-address';
 export type { ProjectAddressDto } from './models/project-address-dto';
@@ -23,4 +24,6 @@ export type { UpdateAbsenceStatusDto } from './models/update-absence-status-dto'
 export type { UpdateProjectDto } from './models/update-project-dto';
 export type { UpdateProjectStatusDto } from './models/update-project-status-dto';
 export type { UpdateTimeEntryDto } from './models/update-time-entry-dto';
+export type { UpdateUserDto } from './models/update-user-dto';
 export type { User } from './models/user';
+export type { UserResponseDto } from './models/user-response-dto';

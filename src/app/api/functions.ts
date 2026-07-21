@@ -35,6 +35,8 @@ export type { ApiAuthLoginPost$Json$Params as ApiAuthLoginPost$Json$Params } fro
 export { apiAuthLoginPost$Json as apiAuthLoginPost$Json } from './fn/auth/api-auth-login-post-json';
 export type { ApiAuthRegisterUserPost$Params as ApiAuthRegisterUserPost$Params } from './fn/auth/api-auth-register-user-post';
 export { apiAuthRegisterUserPost as apiAuthRegisterUserPost } from './fn/auth/api-auth-register-user-post';
+export type { ApiNewsletterSubscribePost$Params as ApiNewsletterSubscribePost$Params } from './fn/newsletter/api-newsletter-subscribe-post';
+export { apiNewsletterSubscribePost as apiNewsletterSubscribePost } from './fn/newsletter/api-newsletter-subscribe-post';
 export type { ApiProjectsGet$Plain$Params as ApiProjectsGet$Plain$Params } from './fn/project/api-projects-get-plain';
 export { apiProjectsGet$Plain as apiProjectsGet$Plain } from './fn/project/api-projects-get-plain';
 export type { ApiProjectsGet$Json$Params as ApiProjectsGet$Json$Params } from './fn/project/api-projects-get-json';
@@ -91,3 +93,17 @@ export type { ApiTimeEntriesProjectProjectIdGet$Plain$Params as ApiTimeEntriesPr
 export { apiTimeEntriesProjectProjectIdGet$Plain as apiTimeEntriesProjectProjectIdGet$Plain } from './fn/time-entry/api-time-entries-project-project-id-get-plain';
 export type { ApiTimeEntriesProjectProjectIdGet$Json$Params as ApiTimeEntriesProjectProjectIdGet$Json$Params } from './fn/time-entry/api-time-entries-project-project-id-get-json';
 export { apiTimeEntriesProjectProjectIdGet$Json as apiTimeEntriesProjectProjectIdGet$Json } from './fn/time-entry/api-time-entries-project-project-id-get-json';
+export type { ApiUsersGet$Plain$Params as ApiUsersGet$Plain$Params } from './fn/user/api-users-get-plain';
+export { apiUsersGet$Plain as apiUsersGet$Plain } from './fn/user/api-users-get-plain';
+export type { ApiUsersGet$Json$Params as ApiUsersGet$Json$Params } from './fn/user/api-users-get-json';
+export { apiUsersGet$Json as apiUsersGet$Json } from './fn/user/api-users-get-json';
+export type { GetUserById$Plain$Params as GetUserById$Plain$Params } from './fn/user/get-user-by-id-plain';
+export { getUserById$Plain as getUserById$Plain } from './fn/user/get-user-by-id-plain';
+export type { GetUserById$Json$Params as GetUserById$Json$Params } from './fn/user/get-user-by-id-json';
+export { getUserById$Json as getUserById$Json } from './fn/user/get-user-by-id-json';
+export type { ApiUsersIdPut$Plain$Params as ApiUsersIdPut$Plain$Params } from './fn/user/api-users-id-put-plain';
+export { apiUsersIdPut$Plain as apiUsersIdPut$Plain } from './fn/user/api-users-id-put-plain';
+export type { ApiUsersIdPut$Json$Params as ApiUsersIdPut$Json$Params } from './fn/user/api-users-id-put-json';
+export { apiUsersIdPut$Json as apiUsersIdPut$Json } from './fn/user/api-users-id-put-json';
+export type { ApiUsersIdDelete$Params as ApiUsersIdDelete$Params } from './fn/user/api-users-id-delete';
+export { apiUsersIdDelete as apiUsersIdDelete } from './fn/user/api-users-id-delete';
